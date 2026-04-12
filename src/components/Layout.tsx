@@ -16,7 +16,7 @@ const Layout = () => {
       <aside className="w-64 bg-surface border-r border-white/5 flex flex-col">
         <div className="p-6">
           <h1 className="text-xl font-bold flex items-center gap-2 uppercase italic tracking-tighter">
-            <img src="/icon.png?v=2" alt="Clover" className="w-8 h-8 object-contain" /> Poker Master
+            <img src="/icon.png?v=2" alt="Clover" className="w-8 h-8 object-contain" /> Poker-Master
           </h1>
         </div>
         
