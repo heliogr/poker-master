@@ -11,12 +11,19 @@ const Login = () => {
   const [isRecovery, setIsRecovery] = useState(false);
   const navigate = useNavigate();
 
-  // Detectar si venimos de un enlace de recuperación
-  useState(() => {
-    if (window.location.hash.includes('type=recovery')) {
+  useEffect(() => {
+    console.log("Current URL:", window.location.href);
+    console.log("Hash:", window.location.hash);
+    console.log("Search:", window.location.search);
+    
+    if (
+      window.location.hash.includes('type=recovery') || 
+      window.location.search.includes('type=recovery') ||
+      window.location.search.includes('recovery=true')
+    ) {
       setIsRecovery(true);
     }
-  });
+  }, []);
 
   const handleUpdatePassword = async (e: React.FormEvent) => {
     e.preventDefault();
