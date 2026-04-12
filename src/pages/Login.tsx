@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,7 +7,34 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [isRecovery, setIsRecovery] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (
+      window.location.hash.includes('type=recovery') || 
+      window.location.search.includes('type=recovery') ||
+      window.location.search.includes('recovery=true')
+    ) {
+      setIsRecovery(true);
+    }
+  }, []);
+
+  const handleUpdatePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) {
+      setError(error.message);
+      setLoading(false);
+    } else {
+      alert('Contraseña actualizada con éxito');
+      setIsRecovery(false);
+      navigate('/');
+    }
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,6 +49,34 @@ const Login = () => {
       navigate('/');
     }
   };
+
+  if (isRecovery) {
+    return (
+      <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center p-4">
+        <div className="w-full max-w-md bg-zinc-900/50 backdrop-blur-xl p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
+          <h2 className="text-2xl font-black text-white uppercase italic mb-6 text-center">Actualizar Contraseña</h2>
+          {error && (
+            <div className="bg-red-500/20 text-red-400 p-3 rounded-lg mb-4 text-xs text-center">
+              {error}
+            </div>
+          )}
+          <form onSubmit={handleUpdatePassword} className="space-y-4">
+            <input 
+              type="password" 
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="w-full bg-black/40 border border-white/5 rounded-2xl px-5 py-4 text-white"
+              placeholder="Nueva Contraseña"
+              required
+            />
+            <button className="w-full bg-primary text-white font-black text-[10px] uppercase py-5 rounded-2xl">
+              Guardar Contraseña
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center p-4">
@@ -71,6 +126,15 @@ const Login = () => {
             {loading ? 'Sincronizando...' : 'Ingresar al Terminal'}
           </button>
         </form>
+        <div className="mt-8 text-center flex flex-col gap-4">
+          <button 
+            type="button"
+            onClick={() => setIsRecovery(true)}
+            className="text-[10px] font-black text-primary hover:text-white uppercase tracking-widest transition-colors border border-primary/20 py-3 rounded-xl px-4"
+          >
+            ⚠️ BOTÓN DE EMERGENCIA: CAMBIAR CONTRASEÑA
+          </button>
+        </div>
       </div>
     </div>
   );
