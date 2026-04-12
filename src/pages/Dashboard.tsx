@@ -398,8 +398,8 @@ const Dashboard = () => {
       <header className="mb-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">
-              Poker Analytics
+            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight uppercase italic">
+              Estadísticas de Juego
             </h1>
             <p className="text-zinc-500 text-sm mt-1">Tracking your spin & go performance</p>
           </div>

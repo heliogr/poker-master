@@ -26,7 +26,7 @@ const Layout = () => {
             className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive ? 'bg-primary/10 text-primary font-medium' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
           >
             <LayoutDashboard size={20} />
-            Dashboard
+            Estadísticas de Juego
           </NavLink>
           <NavLink 
             to="/upload" 
