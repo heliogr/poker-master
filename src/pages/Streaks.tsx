@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
-import { Trophy, TrendingUp, TrendingDown, Zap, Target, Flame, Award, Clock, Calendar as CalendarIcon } from 'lucide-react';
+import { Trophy, TrendingUp, TrendingDown, Zap, Target, Flame, Award, Clock } from 'lucide-react';
 import { 
   BarChart, 
   Bar, 

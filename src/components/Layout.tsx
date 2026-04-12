@@ -1,5 +1,5 @@
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, PlayCircle, UploadCloud, LogOut, Users, TrendingUp, Brain } from 'lucide-react';
+import { LayoutDashboard, PlayCircle, UploadCloud, LogOut, Users, TrendingUp } from 'lucide-react';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 
 const Layout = () => {

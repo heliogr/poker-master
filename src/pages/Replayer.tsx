@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
-import { Play, Pause, SkipBack, SkipForward, Upload, FolderOpen, Loader2 } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { Play, Pause, SkipBack, SkipForward, Upload, FolderOpen } from 'lucide-react';
 import * as mammoth from 'mammoth';
 
 // Configuración de palos y normalización de cartas
@@ -48,15 +48,6 @@ const CardDisplay = ({ card, size = 'normal', rotated = false }: { card: string;
   );
 };
 
-const ChipStack = ({ amount }: { amount: number }) => {
-  if (amount <= 0) return null;
-  return (
-    <div className="flex items-center justify-center bg-black/40 px-2 py-0.5 rounded-full border border-white/10">
-      <span className="text-[10px] font-bold text-yellow-500">€{amount}</span>
-    </div>
-  );
-};
-
 // --- Tipos e Interfaces ---
 interface HandAction {
   player: string;
@@ -87,6 +78,7 @@ interface HandHistory {
   players: PlayerInfo[];
   actions: HandAction[];
   rawBlock: string;
+  dealerSeat: number;
 }
 
 // --- Parser Simple y Robusto ---
