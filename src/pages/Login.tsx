@@ -58,6 +58,11 @@ const Login = () => {
       <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-md bg-zinc-900/50 backdrop-blur-xl p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
           <h2 className="text-2xl font-black text-white uppercase italic mb-6 text-center">Actualizar Contraseña</h2>
+          {error && (
+            <div className="bg-red-500/20 text-red-400 p-3 rounded-lg mb-4 text-xs text-center">
+              {error}
+            </div>
+          )}
           <form onSubmit={handleUpdatePassword} className="space-y-4">
             <input 
               type="password" 
