@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useNavigate } from 'react-router-dom';
-import iconUrl from '/icon.png?url';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -34,7 +33,7 @@ const Login = () => {
         
         <div className="text-center mb-10">
           <h1 className="text-4xl font-black italic tracking-tighter flex justify-center items-center gap-3 mb-3 text-white uppercase">
-            <img src={iconUrl} alt="Clover" className="w-12 h-12 object-contain" /> POKERMASTER
+            <img src="/icon.png?v=2" alt="Clover" className="w-12 h-12 object-contain" /> POKERMASTER
           </h1>
           <p className="text-zinc-500 font-bold tracking-widest text-[10px] uppercase">Panel de Analista Profesional</p>
         </div>
