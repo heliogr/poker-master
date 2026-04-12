@@ -7,7 +7,30 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [isRecovery, setIsRecovery] = useState(false);
   const navigate = useNavigate();
+
+  // Detectar si venimos de un enlace de recuperación
+  useState(() => {
+    if (window.location.hash.includes('type=recovery')) {
+      setIsRecovery(true);
+    }
+  });
+
+  const handleUpdatePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) {
+      setError(error.message);
+      setLoading(false);
+    } else {
+      alert('Contraseña actualizada con éxito');
+      setIsRecovery(false);
+      navigate('/');
+    }
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,6 +45,29 @@ const Login = () => {
       navigate('/');
     }
   };
+
+  if (isRecovery) {
+    return (
+      <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center p-4">
+        <div className="w-full max-w-md bg-zinc-900/50 backdrop-blur-xl p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
+          <h2 className="text-2xl font-black text-white uppercase italic mb-6 text-center">Actualizar Contraseña</h2>
+          <form onSubmit={handleUpdatePassword} className="space-y-4">
+            <input 
+              type="password" 
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="w-full bg-black/40 border border-white/5 rounded-2xl px-5 py-4 text-white"
+              placeholder="Nueva Contraseña"
+              required
+            />
+            <button className="w-full bg-primary text-white font-black text-[10px] uppercase py-5 rounded-2xl">
+              Guardar Contraseña
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center p-4">
