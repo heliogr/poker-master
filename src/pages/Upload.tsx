@@ -114,7 +114,7 @@ const Upload = () => {
         <div>
           <h2 className="text-5xl font-black tracking-tighter text-white italic uppercase leading-none">IMPORTACIÓN <span className="text-zinc-700 not-italic font-light">TERMINAL</span></h2>
           <p className="text-zinc-500 font-bold tracking-widest text-[10px] mt-2 flex items-center gap-2 uppercase">
-            SOPORTE DE HISTORIALES POKERSTARS Y WINAMAX
+            SOPORTE DE HISTORIALES POKERSTARS
           </p>
         </div>
         {processing && (
