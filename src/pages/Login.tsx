@@ -124,6 +124,15 @@ const Login = () => {
             {loading ? 'Sincronizando...' : 'Ingresar al Terminal'}
           </button>
         </form>
+        <div className="mt-8 text-center flex flex-col gap-4">
+          <button 
+            type="button"
+            onClick={() => setIsRecovery(true)}
+            className="text-[10px] font-black text-primary hover:text-white uppercase tracking-widest transition-colors border border-primary/20 py-3 rounded-xl px-4"
+          >
+            ⚠️ BOTÓN DE EMERGENCIA: CAMBIAR CONTRASEÑA
+          </button>
+        </div>
       </div>
     </div>
   );
