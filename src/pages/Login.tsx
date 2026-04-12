@@ -35,7 +35,7 @@ const Login = () => {
           <h1 className="text-4xl font-black italic tracking-tighter flex justify-center items-center gap-3 mb-3 text-white">
             <img src="/icon.png?v=2" alt="Clover" className="w-12 h-12 object-contain" /> Poker-Master
           </h1>
-          <p className="text-zinc-500 font-bold tracking-widest text-[10px] uppercase">Panel de Análisis de Juego</p>
+          <p className="text-zinc-500 font-bold tracking-widest text-[10px] uppercase">Panel de Estadísticas de Juego</p>
         </div>
         
         {error && (
