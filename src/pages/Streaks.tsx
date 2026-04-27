@@ -697,7 +697,7 @@ const Streaks = () => {
                   <Bar 
                     dataKey="profit" 
                     radius={[4, 4, 0, 0]}
-                    onClick={(data) => {
+                    onClick={(data: any) => {
                       if (data && data.index !== undefined) {
                         setSelectedDay(selectedDay === data.index ? null : data.index);
                       }
