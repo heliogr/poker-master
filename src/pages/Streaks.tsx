@@ -46,6 +46,7 @@ const Streaks = () => {
   const [selectedTimeFilter, setSelectedTimeFilter] = useState('3M');
   const [customRange, setCustomRange] = useState<{ start: string; end: string } | null>(null);
   const [selectedMultiTab, setSelectedMultiTab] = useState<number | null>(null);
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
   useEffect(() => {
     fetchTournaments();
@@ -225,6 +226,13 @@ const Streaks = () => {
       profit: 0, 
       games: 0 
     }));
+
+    const daySpecificHours = Array(24).fill(0).map((_, i) => ({ 
+      name: `${i}h`, 
+      hour: i, 
+      profit: 0, 
+      games: 0 
+    }));
     
     const days = [
       { name: 'Lun', profit: 0, games: 0, index: 1 },
@@ -243,8 +251,15 @@ const Streaks = () => {
 
       const profit = t.prize - t.buy_in;
 
+      // Global hours
       hours[h].profit = parseFloat((hours[h].profit + profit).toFixed(2));
       hours[h].games += 1;
+
+      // Day specific hours
+      if (selectedDay !== null && dayIdx === selectedDay) {
+        daySpecificHours[h].profit = parseFloat((daySpecificHours[h].profit + profit).toFixed(2));
+        daySpecificHours[h].games += 1;
+      }
 
       const dayObj = days.find(day => day.index === dayIdx);
       if (dayObj) {
@@ -258,16 +273,20 @@ const Streaks = () => {
       return order.indexOf(a.index) - order.indexOf(b.index);
     });
 
-    const bestHour = [...hours].sort((a, b) => b.profit - a.profit)[0];
+    const activeHours = selectedDay !== null ? daySpecificHours : hours;
+    const bestHour = [...activeHours].sort((a, b) => b.profit - a.profit)[0];
     const bestDay = [...days].sort((a, b) => b.profit - a.profit)[0];
 
+    const selectedDayObj = days.find(d => d.index === selectedDay);
+
     return { 
-      hours, 
+      hours: activeHours, 
       days: sortedDays,
       bestHour: bestHour && bestHour.profit > 0 ? bestHour : null,
-      bestDay: bestDay && bestDay.profit > 0 ? bestDay : null
+      bestDay: bestDay && bestDay.profit > 0 ? bestDay : null,
+      selectedDayName: selectedDayObj?.name || null
     };
-  }, [filteredTournaments]);
+  }, [filteredTournaments, selectedDay]);
 
   const tabs = [
     { id: null, label: 'GENERAL' },
@@ -550,14 +569,28 @@ const Streaks = () => {
           <div className="bg-surface border border-white/5 rounded-2xl p-6">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h4 className="text-sm font-bold text-white uppercase tracking-widest">Beneficio por Hora</h4>
-                <p className="text-xs text-zinc-500 uppercase">Análisis de franja horaria (24h)</p>
+                <h4 className="text-sm font-bold text-white uppercase tracking-widest">
+                  Beneficio por Hora {timeData.selectedDayName ? `(${timeData.selectedDayName})` : ''}
+                </h4>
+                <p className="text-xs text-zinc-500 uppercase">
+                  {timeData.selectedDayName ? `Análisis específico para los ${timeData.selectedDayName}s` : 'Análisis de franja horaria (24h)'}
+                </p>
               </div>
-              {timeData.bestHour && (
-                <div className="bg-green-500/10 border border-green-500/20 px-3 py-1 rounded text-[10px] font-black text-green-500 uppercase">
-                  TOP: {timeData.bestHour.name}
-                </div>
-              )}
+              <div className="flex gap-2">
+                {selectedDay !== null && (
+                  <button 
+                    onClick={() => setSelectedDay(null)}
+                    className="bg-white/5 hover:bg-white/10 px-2 py-1 rounded text-[10px] font-bold text-zinc-400 uppercase transition-colors"
+                  >
+                    Ver todos
+                  </button>
+                )}
+                {timeData.bestHour && (
+                  <div className="bg-green-500/10 border border-green-500/20 px-3 py-1 rounded text-[10px] font-black text-green-500 uppercase">
+                    TOP: {timeData.bestHour.name}
+                  </div>
+                )}
+              </div>
             </div>
             
             <div className="h-[250px] w-full">
@@ -615,7 +648,7 @@ const Streaks = () => {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h4 className="text-sm font-bold text-white uppercase tracking-widest">Rendimiento por Día</h4>
-                <p className="text-xs text-zinc-500 uppercase">Días de la semana</p>
+                <p className="text-xs text-zinc-500 uppercase">Haz clic en un día para filtrar horas</p>
               </div>
               {timeData.bestDay && (
                 <div className="bg-blue-500/10 border border-blue-500/20 px-3 py-1 rounded text-[10px] font-black text-blue-500 uppercase">
@@ -661,12 +694,23 @@ const Streaks = () => {
                     }}
                   />
                   <ReferenceLine y={0} stroke="#ffffff10" />
-                  <Bar dataKey="profit" radius={[4, 4, 0, 0]}>
+                  <Bar 
+                    dataKey="profit" 
+                    radius={[4, 4, 0, 0]}
+                    onClick={(data) => {
+                      if (data && data.index !== undefined) {
+                        setSelectedDay(selectedDay === data.index ? null : data.index);
+                      }
+                    }}
+                    cursor="pointer"
+                  >
                     {timeData.days.map((entry, index) => (
                       <Cell 
                         key={`cell-${index}`} 
                         fill={entry.profit >= 0 ? '#3b82f6' : '#ef4444'} 
-                        fillOpacity={entry.profit === 0 ? 0.1 : 0.8}
+                        fillOpacity={selectedDay === null ? (entry.profit === 0 ? 0.1 : 0.8) : (selectedDay === entry.index ? 1 : 0.2)}
+                        stroke={selectedDay === entry.index ? '#fff' : 'none'}
+                        strokeWidth={2}
                       />
                     ))}
                   </Bar>
